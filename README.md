@@ -44,4 +44,3 @@
 
 ---
 
-Would you like the **code examples** or **detailed instructions** for any of these tasks?
