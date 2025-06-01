@@ -10,6 +10,8 @@
 #include <array>
 #include <concepts>
 #include <vector>
+#include <deque>
+#include <utility>
 template<typename T>
 void swapTwoVariable(T& val1, T& val2)
 {
@@ -39,7 +41,7 @@ void printElementArray(const std::array<T, size>& arr)
 }
 
 template<typename T>
-void printElementVector(const std::vector<T> v)
+void printElementVector(const std::vector<T>& v)
 {
     std::cout << "Vector: ";
     for (size_t i = 0; i < v.size(); ++i)
@@ -85,12 +87,113 @@ public:
     a first;
     b second;
 
+    pair() = default;
+    pair(const a& f, const b& s) : first(f), second(s) {}
+};
+template<typename T>
+class stackShann
+{
+public:
+    void push(const T& item)
+    {
+        data.push_back(item);
+    }
 
+    void pop()
+    {
+        if (!empty())
+        {
+            data.pop_back();
+        }
+    }
+    T& top()
+    {
+        return data.back();
+    }
+    const bool empty() const
+    {
+        return data.empty();
+    }
+    const size_t size() const
+    {
+        return data.size();
+    }
+    T& peek()
+    {
+        return data.front();
+    }
+    // Iterator support for range-based for loops
+    auto begin() { return data.begin(); }
+    auto end() { return data.end(); }
+    auto begin() const { return data.begin(); }
+    auto end() const { return data.end(); }
+private:
+    std::deque<T> data;
 };
 
+template<typename T, size_t size, typename U>
+long findElementArray(const std::array<T, size>& arr,  U&& target)
+{
+    size_t left = 0; 
+    size_t right = arr.size() - 1;
 
+    while (left <= right)
+    {
+        if (arr[left] == target) return left;
+        if (arr[right] == target) return right;
 
+        left++;
+        right--;
+    }
+    return -1;
+}
 
+template<typename a, typename b>           // Two template parameters allow different types
+constexpr                                  // Enables compile-time evaluation when possible
+decltype(auto)                            // Auto-deduces return type, preserves value category
+addTwoNumbers(a&& val1, b&& val2)         // Universal references - bind to ANY value category
+{
+    return std::forward<a>(val1) + std::forward<b>(val2);
+    //     ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^
+    //     Perfect forwarding - preserves value category and const-ness
+    //     Avoids unnecessary copies for temporaries and rvalues
+}
+
+/*
+OPTIMIZATION BREAKDOWN:
+
+1. template<typename a, typename b>
+   - Allows mixing different types (int + double, float + int, etc.)
+   - Compiler generates specialized versions for each type combination
+
+2. constexpr
+   - Function can be evaluated at compile-time when arguments are compile-time constants
+   - Example: constexpr auto result = addTwoNumbers(5, 10); // Computed at compile-time
+   - Zero runtime cost for constant expressions
+
+3. decltype(auto)
+   - Automatically deduces the correct return type based on the expression
+   - Preserves value category (lvalue/rvalue) and cv-qualifiers
+   - No manual type specification needed
+
+4. a&& and b&& (Universal References)
+   - NOT rvalue references in template context - they're "forwarding references"
+   - Bind to ANYTHING: lvalues, rvalues, const, non-const
+   - Enable perfect forwarding without overload explosion
+
+5. std::forward<a>(val1) and std::forward<b>(val2)
+   - Perfect forwarding: preserves the value category of the original arguments
+   - If argument was rvalue → forwards as rvalue (enables move semantics)
+   - If argument was lvalue → forwards as lvalue (normal reference)
+   - Eliminates unnecessary copies for temporary objects
+*/
+ 
+template<typename T, size_t size>
+void reverseArray(std::array<T, size>& arr) 
+{
+    std::reverse(arr.begin(), arr.end());
+}
+ 
 /*
 Sure! Here's a list of **30 C++ template tasks** ranging from **easy to hard**, designed to help you progressively master **function templates**, **class templates**, **template specialization**, **variadic templates**, and **metaprogramming**.
 
