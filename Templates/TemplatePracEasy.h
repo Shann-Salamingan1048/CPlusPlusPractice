@@ -12,6 +12,7 @@
 #include <vector>
 #include <deque>
 #include <utility>
+#include <initializer_list>
 template<typename T>
 void swapTwoVariable(T& val1, T& val2)
 {
@@ -193,7 +194,128 @@ void reverseArray(std::array<T, size>& arr)
 {
     std::reverse(arr.begin(), arr.end());
 }
- 
+
+
+template<typename T>
+class Vec
+{
+public:
+    Vec() : m_size(0), m_trueCap(1)
+    {
+        m_data = new T[1];
+
+    }
+    Vec(std::initializer_list<T> init) : m_size(init.size())
+    {
+        m_trueCap m_size > 0 ? m_size : 1;
+        m_data = new T[m_trueCap];
+
+        size_t i = 0;
+        for (const auto& item : init) 
+            m_data[i++] = item;
+    }
+    Vec(const Vec& other) : m_size(other.m_size), m_trueCap(other.m_trueCap)
+    {
+        m_data = new T[m_trueCap];
+        for (size_t i = 0; i < m_size; ++i)
+        {
+            m_data[i] = other.m_data[i];
+        }
+    }
+    ~Vec()
+    {
+        delete[] m_data;
+    }
+
+public:
+    Vec& operator=(const Vec& obj)
+    {
+        if (this != &obj) // Self-assignment check
+        {
+            // clean up old memory
+            delete[] m_data;
+
+            m_trueCap = obj.m_trueCap;
+            m_size = obj.m_size;
+            m_data = new T[m_trueCap];
+
+            for (size_t i = 0; i < m_size; ++i)
+                m_data[i] = obj.m_data[i];
+        }
+        return *this; // Return reference to the current object
+    }
+    Vec& operator=(std::initializer_list<T> init)
+    { // Shallow Copying Solved
+        // Clean up old memory
+        delete[] m_data;
+
+        // Set new size and capacity
+        m_size = init.size();
+        m_trueCap = m_size > 0 ? m_size : 1;
+        m_data = new T[m_trueCap];
+
+        // Copy data
+        size_t i = 0;
+        for (const auto& item : init) 
+            m_data[i++] = item;
+        
+        return *this;
+    }
+    T& operator[](size_t index)
+    {
+        if (index >= m_size)
+        {
+            throw std::out_of_range("Index out of bounds!");
+        }
+        return m_data[index];
+    }
+
+    const T& operator[](size_t index) const
+    {
+        if (index >= m_size)
+        {
+            throw std::out_of_range("Index out of bounds!");
+        }
+        return m_data[index];
+    }
+public:
+    void pushback(const T& val)
+    {
+        
+        if (m_size >= m_trueCap)
+        {
+            size_t newCap = m_trueCap * 2
+            T* temp = new T[newCap];
+
+            for (size_t i = 0; i < m_size; ++i)
+            {
+                temp[i] = m_data[i];
+            }
+
+            delete[] m_data;
+            m_trueCap = newCap;
+            m_data = temp;
+        }
+        m_data[m_size] = val;
+        ++m_size;
+    }
+    void print() const
+    {
+        std::cout << "Vec: ";
+        for (size_t i = 0; i < m_size; ++i)
+        {
+            if (i != size - 1)
+                std::cout << m_data[i] << ", ";
+            else
+                std::cout << m_data[i] << '\n';
+        }
+    }
+
+private:
+    T* m_data;
+    size_t m_size;
+    size_t m_trueCap;
+};
 /*
 Sure! Here's a list of **30 C++ template tasks** ranging from **easy to hard**, designed to help you progressively master **function templates**, **class templates**, **template specialization**, **variadic templates**, and **metaprogramming**.
 

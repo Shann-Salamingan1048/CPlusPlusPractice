@@ -60,6 +60,19 @@ void easy()
 	std::cout << addTwoNumbers(add1, add2) << '\n';
 	reverseArray(arr);
 	printElementArray(arr);
+
+
+	Vec<std::string> vec;
+	vec.pushBack("Shann");
+	vec.pushBack("Delfin");
+	vec.pushBack("Caturla");
+	vec.pushBack("Salamingan");
+	vec.pushBack("III");
+	for (const auto& i : vec)
+	{
+		std::cout << i << ", ";
+	}
+	std::cout << '\n';
 }
 int main()
 {
