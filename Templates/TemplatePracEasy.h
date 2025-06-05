@@ -207,7 +207,7 @@ public:
     }
     Vec(std::initializer_list<T> init) : m_size(init.size())
     {
-        m_trueCap m_size > 0 ? m_size : 1;
+        m_trueCap = m_size > 0 ? m_size : 1;
         m_data = new T[m_trueCap];
 
         size_t i = 0;
@@ -284,7 +284,7 @@ public:
         
         if (m_size >= m_trueCap)
         {
-            size_t newCap = m_trueCap * 2
+            size_t newCap = m_trueCap * 2;
             T* temp = new T[newCap];
 
             for (size_t i = 0; i < m_size; ++i)
@@ -304,7 +304,7 @@ public:
         std::cout << "Vec: ";
         for (size_t i = 0; i < m_size; ++i)
         {
-            if (i != size - 1)
+            if (i != m_size - 1)
                 std::cout << m_data[i] << ", ";
             else
                 std::cout << m_data[i] << '\n';
@@ -336,18 +336,7 @@ Sure! Here's a list of **30 C++ template tasks** ranging from **easy to hard**, 
 
 ---
 
-### 🟡 **Medium (11–20): Intermediate Template Usage**
 
-11. **Class Template for a Linked List**
-12. **Class Template for a Queue**
-13. **Function Template for Calculating Average of Array**
-14. **Class Template with Default Type Parameter**
-15. **Function Template with Non-Type Parameter (e.g., array size)**
-16. **Template Specialization for Printing `int` and `std::string` Differently**
-17. **Partial Specialization of a Class Template**
-18. **Overload a Template Function for `char*`**
-19. **Create a Generic Comparator Using Function Templates**
-20. **Create a Class Template that Works as a Matrix**
 
 ---
 

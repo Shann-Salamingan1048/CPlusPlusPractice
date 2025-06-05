@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <array>
+#include "Templates/TemplatePracIntermediate.h"
 void easy()
 {
 	std::string x = "10";
@@ -63,16 +64,19 @@ void easy()
 
 
 	Vec<std::string> vec;
-	vec.pushBack("Shann");
-	vec.pushBack("Delfin");
-	vec.pushBack("Caturla");
-	vec.pushBack("Salamingan");
-	vec.pushBack("III");
-	for (const auto& i : vec)
-	{
-		std::cout << i << ", ";
-	}
-	std::cout << '\n';
+	vec.pushback("asdadsa");
+	vec[0] = "Shann";
+	vec.pushback("asd");
+	vec.pushback("Caturla");
+	vec.pushback("Salamingan");
+	vec.pushback("III");
+	vec[1] = "Delfin";
+
+	vec.print();
+}
+void med()
+{
+
 }
 int main()
 {
