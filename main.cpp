@@ -76,12 +76,24 @@ void easy()
 }
 void med()
 {
+	LinkedList<int> l1 = LinkedList<int>(10); // 1
+	l1.insertAtHead(2);  // 0
+	l1.insertAtTail(22); // 2
+	l1.insertAtTail(33); // 3
+	l1.insertIndex(50, 2);
 
+	
+	l1.deleteHead();
+	l1.deleteTail();
+	l1.deleteIndex(1);
+	l1.deleteIndex(1);
+	l1.deleteIndex(0);
+	l1.print();
 }
 int main()
 {
-	easy();
-
+	//easy();
+	med();
 
 	return 0;
 }
