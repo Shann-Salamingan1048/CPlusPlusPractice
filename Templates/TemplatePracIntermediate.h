@@ -182,28 +182,133 @@ public:
 		}
 		std::cout << "NULL\n";
 	}
-	static const size_t& size()
+	const size_t size() const
 	{
 		return m_size;
 	}
 private:
-	static void incrementSize()
+	void incrementSize()
 	{
 		++m_size;
 	}
-	static void decrementSize()
+	void decrementSize()
 	{
 		--m_size;
 	}
 private:
 	Node<T>* m_head;
-	static inline size_t m_size;
+	size_t m_size;
 
 
 };
 
 
 
+
+template <typename T>
+class circularLinkedList
+{
+public:
+	circularLinkedList() : m_size(0), m_head(nullptr) {}
+	circularLinkedList(const T& val) : m_head(nullptr)
+	{
+		insertAtHead(val);
+	}
+
+	~circularLinkedList()
+	{
+		if (m_head == nullptr) return;
+		Node<T>* current = m_head;
+		Node<T>* nextNode;
+
+		// Break the circular link first
+		Node<T>* tail = m_head;
+		while (tail->next != m_head && tail->next != m_head) // or make it first a normal LinkedList
+		{
+			tail = tail->next;
+		}
+		if(tail->next == m_head)
+			tail->next = nullptr;
+
+		// Now delete all nodes
+		while (current != nullptr)
+		{
+			nextNode = current->next;
+			delete current;
+			current = nextNode;
+		}
+		m_head = nullptr;
+	}
+
+public:
+	void insertAtHead(const T& val)
+	{
+		Node<T>* nextNode = new Node<T>(val);
+
+		if (m_head == nullptr)
+		{
+			m_head = nextNode;
+			m_head->next = m_head; // Point to itself
+		}
+		else
+		{
+			Node<T>* current = m_head;
+			while (current->next != m_head && current->next != nullptr)
+			{
+				current = current->next;
+			}
+			nextNode->next = m_head;
+			current->next = nextNode;
+			m_head = nextNode;
+
+		}
+		incrementSize();
+	}
+
+public:
+	const size_t size() const
+	{
+		return m_size;
+	}
+	void print()
+	{
+		if (m_head == nullptr)
+		{
+			std::cout << "Empty!\n";
+			return;
+		}
+		Node<T>* current = m_head;
+
+		std::cout << "Circular Linkedlist Current Size: " << size() << '\n';
+
+		do 
+		{
+			std::cout << current->data;
+			current = current->next;
+			if (current != m_head) 
+			{
+				std::cout << " -> ";
+			}
+		} while (current != m_head);
+		std::cout << '\n';
+		//std::cout << current->data;
+		
+	}
+private:
+	void incrementSize()
+	{
+		++m_size;
+	}
+	void decrementSize()
+	{
+		--m_size;
+	}
+
+private:
+	size_t m_size;
+	Node<T>* m_head;
+
+};
 
 
 

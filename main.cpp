@@ -89,6 +89,15 @@ void med()
 	l1.deleteIndex(1);
 	l1.deleteIndex(0);
 	l1.print();
+
+
+
+	circularLinkedList<int> cl1;
+	cl1.insertAtHead(10);
+	cl1.insertAtHead(20);
+	cl1.insertAtHead(30);
+
+	cl1.print();
 }
 int main()
 {
