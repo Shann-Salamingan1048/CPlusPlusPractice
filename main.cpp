@@ -92,12 +92,27 @@ void med()
 
 
 
-	circularLinkedList<int> cl1;
+	cirLinkedList<int> cl1;
+	cl1.insertAtTail(110);
 	cl1.insertAtHead(10);
 	cl1.insertAtHead(20);
 	cl1.insertAtHead(30);
+	cl1.insertAtTail(60);
+	cl1.insertAtIndex(40, 1);
 
+	cl1.deleteHead();
+	cl1.deleteTail();
+
+	cl1.deleteIndex(2);
 	cl1.print();
+
+	std::vector<int> vec = { 1, 2, 3, 4, 5 };
+	std::array<double, 3> arr = { 1.5, 2.5, 3.5 };
+	// std::vector<std::string> vec2 = { "Shann", "Delfin" };
+
+	std::cout << calculateAverageArray(vec) << '\n';  // 3.0
+	std::cout << calculateAverageArray(arr) << '\n';  // 2.5
+	// std::cout << calculateAverageArray(vec2) << '\n';  // error using std::string. nice
 }
 int main()
 {

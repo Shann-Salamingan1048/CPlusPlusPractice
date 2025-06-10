@@ -1,6 +1,17 @@
-﻿#pragma once
-#include <iostream>
+﻿/*
+	IMPORTANT REMINDER!!!
 
+	IN ORDER TO DELETE A NODE, IT SHOULD BE POINTER BY ONE POINTER BEFORE DELETING IT OTHERWISE IT WILL ERROR!!!
+
+
+*/
+
+#pragma once
+#include <iostream>
+#include <concepts>
+#include <vector>
+#include <array>
+#include <numeric>
 template <typename T>
 struct Node
 {
@@ -40,9 +51,9 @@ public:
 		m_head = nextNode;
 		incrementSize();
 	}
-	void insertIndex(const T& val, uint64_t index)
+	void insertIndex(const T& val, size_t index)
 	{
-		if (index > m_size - 1)
+		if (index >= m_size)
 		{
 			throw std::out_of_range("Index out of bounds!");
 		}
@@ -59,7 +70,7 @@ public:
 
 		// Find the node before the insertion point
 		Node<T>* current = m_head;
-		for (uint64_t i = 0; i < index - 1; ++i)
+		for (size_t i = 0; i < index - 1; ++i)
 		{
 			current = current->next;
 		}
@@ -141,7 +152,7 @@ public:
 
 		decrementSize();
 	}
-	void deleteIndex(uint64_t index)
+	void deleteIndex(size_t index)
 	{
 		if (index == 0)
 		{
@@ -153,7 +164,7 @@ public:
 			deleteTail();
 			return;
 		}
-		if (index > m_size - 1)
+		if (index >= m_size)
 		{
 			throw std::out_of_range("Index out of bounds!");
 		}
@@ -203,34 +214,24 @@ private:
 };
 
 
-
-
 template <typename T>
-class circularLinkedList
+class cirLinkedList
 {
 public:
-	circularLinkedList() : m_size(0), m_head(nullptr) {}
-	circularLinkedList(const T& val) : m_head(nullptr)
-	{
-		insertAtHead(val);
-	}
-
-	~circularLinkedList()
+	~cirLinkedList()
 	{
 		if (m_head == nullptr) return;
-		Node<T>* current = m_head;
-		Node<T>* nextNode;
 
-		// Break the circular link first
 		Node<T>* tail = m_head;
-		while (tail->next != m_head && tail->next != m_head) // or make it first a normal LinkedList
+		while (tail->next != m_head)
 		{
 			tail = tail->next;
 		}
-		if(tail->next == m_head)
+		if (tail->next == m_head)
 			tail->next = nullptr;
 
-		// Now delete all nodes
+		Node<T>* current = m_head;
+		Node<T>* nextNode;
 		while (current != nullptr)
 		{
 			nextNode = current->next;
@@ -239,37 +240,156 @@ public:
 		}
 		m_head = nullptr;
 	}
+	cirLinkedList() : m_size(0), m_head(nullptr) {}
+	cirLinkedList(const T& val)
+	{
+		insertAtHead(val);
+	}
 
 public:
 	void insertAtHead(const T& val)
 	{
 		Node<T>* nextNode = new Node<T>(val);
-
 		if (m_head == nullptr)
 		{
 			m_head = nextNode;
-			m_head->next = m_head; // Point to itself
+			m_head->next = m_head;
 		}
 		else
 		{
-			Node<T>* current = m_head;
-			while (current->next != m_head && current->next != nullptr)
+			Node<T>* tail = m_head;
+			while (tail->next != m_head)
 			{
-				current = current->next;
+				tail = tail->next;
 			}
 			nextNode->next = m_head;
-			current->next = nextNode;
+			tail->next = nextNode;
 			m_head = nextNode;
-
 		}
 		incrementSize();
 	}
-
-public:
-	const size_t size() const
+	void insertAtTail(const T& val)
 	{
-		return m_size;
+		Node<T>* newTail = new Node<T>(val);
+		if (m_head == nullptr)
+		{
+			m_head = newTail;
+			m_head->next = m_head;
+		}
+		else
+		{
+			Node<T>* tail = m_head;
+			while (tail->next != m_head)
+			{
+				tail = tail->next;
+			}
+			newTail->next = m_head;
+			tail->next = newTail;
+		}
+		incrementSize();
 	}
+	void insertAtIndex(const T& val, size_t index)
+	{
+		if (index >= getSize())
+		{
+			throw std::out_of_range("Out of bounds!");
+			return;
+		}
+		if (index == 0)
+		{
+			insertAtHead(val);
+			return;
+		}
+		if (index == getSize() - 1)
+		{
+			insertAtTail(val);
+			return;
+		}
+		Node<T>* newNode = new Node<T>(val);
+		Node<T>* current = m_head;
+
+		for (size_t i = 0; i < index - 1; ++i)
+		{
+			current = current->next;
+		}
+		newNode->next = current->next;
+		current->next = newNode;
+		incrementSize();
+	}
+public:
+	void deleteHead()
+	{
+		if (m_head == nullptr) return;
+		if (m_head->next == m_head) // only one node
+		{
+			delete m_head;
+			m_head = nullptr;
+			return;
+		}
+		Node<T>* nodeToDelete = m_head;
+		Node<T>* tail = m_head;
+
+		while (tail->next != m_head)
+		{
+			tail = tail->next;
+		}
+		m_head = m_head->next;
+		tail->next = m_head;
+		 
+		delete nodeToDelete;
+		decrementSize();
+	}
+	void deleteTail()
+	{
+		if (m_head == nullptr)  return;
+		if (m_head->next == m_head) // only one node
+		{
+			delete m_head;
+			m_head = nullptr;
+			return;
+		}
+		Node<T>* tail = m_head; 
+		while (tail->next->next != m_head)
+		{
+			tail = tail->next;
+		}
+		Node<T>* nodeToDelete = tail->next;
+		tail->next = m_head;
+		delete nodeToDelete;
+
+		decrementSize();
+	}
+
+	void deleteIndex(size_t index)
+	{
+		if (index >= getSize())
+		{
+			std::cout << "Out of Bounds!\n";
+			return;
+		};
+		if (index == 0)
+		{
+			deleteHead();
+			return;
+		}
+		if (index == getSize() - 1)
+		{
+			deleteTail();
+			return;
+		}
+
+		Node<T>* chosenNodeIndex = m_head;
+		for (size_t i = 0; i < index - 1; ++i)
+		{
+			chosenNodeIndex = chosenNodeIndex->next;
+		}
+		Node<T>* nodeToDelete = chosenNodeIndex->next;
+		chosenNodeIndex->next = chosenNodeIndex->next->next;
+
+		delete nodeToDelete;
+		decrementSize();
+	}
+public:
 	void print()
 	{
 		if (m_head == nullptr)
@@ -277,41 +397,73 @@ public:
 			std::cout << "Empty!\n";
 			return;
 		}
-		Node<T>* current = m_head;
+		Node<T>* tail = m_head;
+		std::cout << "Circular LinkedList: " << getSize() << "(size)\n";
 
-		std::cout << "Circular Linkedlist Current Size: " << size() << '\n';
-
-		do 
+		do
 		{
-			std::cout << current->data;
-			current = current->next;
-			if (current != m_head) 
+			std::cout << tail->data;
+			tail = tail->next;
+			if (tail != m_head)
 			{
 				std::cout << " -> ";
 			}
-		} while (current != m_head);
+		} while (tail != m_head);
 		std::cout << '\n';
-		//std::cout << current->data;
-		
+	}
+public:
+	const size_t getSize() const
+	{
+		return m_size;
 	}
 private:
-	void incrementSize()
-	{
-		++m_size;
-	}
+
 	void decrementSize()
 	{
 		--m_size;
 	}
-
+	void incrementSize()
+	{
+		++m_size;
+	}
 private:
-	size_t m_size;
 	Node<T>* m_head;
+	size_t m_size;
+
 
 };
 
+// typename T:: gets the type 
+// typename T::value_type gets the value type like if it is string, double, etc
+template<typename T>
+concept arithmeticOnly = std::is_arithmetic_v<T>; // only numeric type like double, float,int, etc
+template<typename T>
+concept IsVectorOrArray = requires
+{	
+	// requires in order is not big deal
+	requires arithmeticOnly<typename T::value_type>; // ensures the container's value_type is numeric
+	requires (
+		std::is_same_v<T, std::vector<typename T::value_type, typename T::allocator_type>> // check if T matches std::vector<value_type, allocator_type>
+or
+		std::is_same_v<T, std::array<typename T::value_type, std::tuple_size<T>::value>>
+			 ); // check if T matches std::array<value_type, size>
+	
+	
+};
+template<IsVectorOrArray T>
+double calculateAverageArray(const T& container)
+{
+	if (container.empty()) return 0.0;
+		return static_cast<double>(
+			std::accumulate(container.begin(), container.end(), 0.0)
+			) / container.size();
 
+}
+/*
+	Question: i dont understand the keyword  concept, does it accept multiple requires? and if requires order is a big deal? in c++.
 
+	and then copy and paste the code in the AI
+*/
 /*
 
 ### 🟡 **Medium (11–20): Intermediate Template Usage**
