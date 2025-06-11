@@ -588,6 +588,64 @@ private:
 	size_t m_size;
 };
 
+template<typename T>
+concept Arithmetic = std::is_arithmetic_v<T>;
+
+template<Arithmetic T, size_t N>
+class Matrix
+{
+public:
+	Matrix(std::initializer_list<T> init)
+	{
+		std::copy(init.begin(), init.end(), m_data.begin());
+	}
+	Matrix() : m_data{} {}
+
+public:
+	T& operator[](size_t i) { return m_data[i]; }
+	const T& operator[](size_t i) const { return m_data[i]; }
+
+public:
+	const T accumulate() const
+	{
+		return std::accumulate(m_data.begin(), m_data.end(), T{ 0 });
+	}
+
+	T dot(const Matrix<T, N>& other) const
+	{
+		T result = T{ 0 };
+		for (size_t i = 0; i < N; ++i)
+		{
+			result += m_data[i] * other.m_data[i];
+		}
+		return result;
+	}
+
+	// Cross product only for 3D vectors
+	Matrix<T, 3> cross(const Matrix<T, 3>& other) const requires (N == 3)
+	{
+		return Matrix<T, 3>{
+			m_data[1] * other.m_data[2] - m_data[2] * other.m_data[1],
+				m_data[2] * other.m_data[0] - m_data[0] * other.m_data[2],
+				m_data[0] * other.m_data[1] - m_data[1] * other.m_data[0]
+		};
+	}
+
+public:
+	void print() const
+	{
+		std::cout << "Matrix" << N << "d<" << typeid(T).name() << ">: (";
+		for (size_t i = 0; i < N; ++i)
+		{
+			std::cout << m_data[i];
+			if (i < N - 1) std::cout << ", ";
+		}
+		std::cout << ")\n";
+	}
+
+private:
+	std::array<T, N> m_data;
+};
 
 
 /*

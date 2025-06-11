@@ -125,6 +125,42 @@ void med()
 
 	//dll1.clear();
 	dll1.print();
+
+	// Type aliases for convenience
+	using Matrix2d = Matrix<double, 2>;
+	using Matrix3d = Matrix<double, 3>;
+	using Matrix2f = Matrix<float, 2>;
+	using Matrix3f = Matrix<float, 3>;
+	using Matrix2i = Matrix<int, 2>;
+	using Matrix3i = Matrix<int, 3>;
+
+	std::cout << "\n=== Double precision 2D ===\n";
+	Matrix<double, 2> m2a{ 3.5, 4.2 };
+	Matrix<double, 2> m2b{ 1.1, 2.3 };
+
+	m2a.print();
+	std::cout << "Accumulation: " << m2a.accumulate() << "\n";
+	std::cout << "Dot Product: " << m2a.dot(m2b) << "\n\n";
+
+	std::cout << "=== Integer 3D ===\n";
+	Matrix<int, 3> m3a{ 1, 0, 0 };
+	Matrix<int, 3> m3b{ 0, 1, 0 };
+
+	m3a.print();
+	std::cout << "Accumulation: " << m3a.accumulate() << "\n";
+	std::cout << "Dot Product: " << m3a.dot(m3b) << "\n";
+
+	auto cross = m3a.cross(m3b);
+	std::cout << "Cross Product: ";
+	cross.print();
+
+	std::cout << "\n=== Float 4D ===\n";
+	Matrix<float, 4> m4a{ 1.5f, 2.5f, 3.5f, 4.5f };
+	Matrix<float, 4> m4b{ 0.5f, 1.0f, 1.5f, 2.0f };
+
+	m4a.print();
+	std::cout << "Accumulation: " << m4a.accumulate() << "\n";
+	std::cout << "Dot Product: " << m4a.dot(m4b) << "\n";
 }
 int main()
 {
