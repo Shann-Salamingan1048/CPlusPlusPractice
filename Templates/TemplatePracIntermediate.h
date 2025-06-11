@@ -17,7 +17,7 @@ struct Node
 {
 	T data;
 	Node* next;
-	Node() {}
+	Node() : data(), next(nullptr) {}
 	Node(const T& val) : data(val), next(nullptr) {}
 };
 
@@ -181,7 +181,7 @@ public:
 		decrementSize();
 	}
 public:
-	void print() 
+	void print() const
 	{
 		Node<T>* current = m_head;
 		std::cout << "Linkedlist Current Size: " << size() << '\n';
@@ -209,8 +209,6 @@ private:
 private:
 	Node<T>* m_head;
 	size_t m_size;
-
-
 };
 
 
@@ -390,7 +388,7 @@ public:
 		decrementSize();
 	}
 public:
-	void print()
+	void print() const
 	{
 		if (m_head == nullptr)
 		{
@@ -448,7 +446,7 @@ or
 		std::is_same_v<T, std::array<typename T::value_type, std::tuple_size<T>::value>>
 			 ); // check if T matches std::array<value_type, size>
 	
-	
+	// Order does not matter
 };
 template<IsVectorOrArray T>
 double calculateAverageArray(const T& container)
@@ -459,11 +457,139 @@ double calculateAverageArray(const T& container)
 			) / container.size();
 
 }
-/*
-	Question: i dont understand the keyword  concept, does it accept multiple requires? and if requires order is a big deal? in c++.
 
-	and then copy and paste the code in the AI
-*/
+template <typename T>
+struct NodeDouble
+{
+	T data;
+	NodeDouble<T>* prev;
+	NodeDouble<T>* next;
+
+	NodeDouble() : data(), prev(nullptr), next(nullptr) {}
+	NodeDouble(const T& val) : data(val), prev(nullptr), next(nullptr) {}
+};
+template<typename T>
+class DoublyLinkedList
+{
+public:
+	DoublyLinkedList() : m_size(0), m_head(nullptr) {}
+	DoublyLinkedList(const T& val)
+	{
+		insertAtHead(val);
+	}
+	~DoublyLinkedList()
+	{
+		clear();
+	}
+	void clear()
+	{
+		NodeDouble<T>* current = m_head;
+		while (current != nullptr)
+		{
+			NodeDouble<T>* nextNode = current->next;
+			delete current;
+			current = nextNode;
+		}
+		m_head = nullptr;
+		m_size = 0;
+	}
+public:
+	void insertAtHead(const T& val)
+	{
+		NodeDouble<T>* newNode = new NodeDouble<T>(val);
+		newNode->next = m_head;
+		if (m_head != nullptr)
+			m_head->prev = newNode;
+		m_head = newNode;
+		incrementSize();
+	}
+	void insertAtTail(const T& val)
+	{
+		if (m_head == nullptr)
+		{
+			insertAtHead(val);
+			return;
+		}
+		NodeDouble<T>* newNode = new NodeDouble<T>(val);
+		NodeDouble<T>* tail = m_head;
+		while (tail->next != nullptr)
+		{
+			tail = tail->next;
+		}
+		tail->next = newNode;
+		newNode->prev = tail;
+		incrementSize();
+	}
+	void insertAtIndex(const T& val, size_t index)
+	{
+		if (index >= getSize())
+		{
+			throw std::out_of_range("Out of bounds!");
+			return;
+		}
+		if (index == 0)
+		{
+			insertAtHead(val);
+			return;
+		}
+		if (index == getSize() - 1)
+		{
+			insertAtTail(val);
+			return;
+		}
+		NodeDouble<T>* newNode = new NodeDouble<T>(val);
+		NodeDouble<T>* current = m_head;
+		for (size_t i = 0; i < index - 1; ++i)
+		{
+			current = current->next;
+		}
+		newNode->next = current->next;
+		newNode->prev = current;
+		current->next = newNode;
+		
+		incrementSize();
+
+	}
+public:
+	void print() const
+	{
+		if (m_head == nullptr)
+		{
+			std::cout << "Empty!\n";
+			return;
+		}
+		NodeDouble<T>* current = m_head;
+		std::cout << "Double Linkedlist Current Size: " << getSize() << '\n';
+		std::cout << "nullptr <-> ";
+		while (current != nullptr)
+		{
+			std::cout << current->data << " <-> ";
+			current = current->next;
+
+		}
+		std::cout << "nullptr\n";
+	}
+public:
+	const size_t getSize() const
+	{
+		return m_size;
+	}
+private:
+	void decrementSize()
+	{
+		--m_size;
+	}
+	void incrementSize()
+	{
+		++m_size;
+	}
+private:
+	NodeDouble<T>* m_head;
+	size_t m_size;
+};
+
+
+
 /*
 
 ### 🟡 **Medium (11–20): Intermediate Template Usage**

@@ -113,6 +113,18 @@ void med()
 	std::cout << calculateAverageArray(vec) << '\n';  // 3.0
 	std::cout << calculateAverageArray(arr) << '\n';  // 2.5
 	// std::cout << calculateAverageArray(vec2) << '\n';  // error using std::string. nice
+
+
+
+	DoublyLinkedList<int> dll1;
+	dll1.insertAtHead(12);
+	dll1.insertAtHead(20);
+	dll1.insertAtTail(50);
+	dll1.insertAtIndex(100, 1);
+	dll1.insertAtIndex(200, 3);
+
+	//dll1.clear();
+	dll1.print();
 }
 int main()
 {
