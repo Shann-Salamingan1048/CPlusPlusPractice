@@ -4,6 +4,7 @@
 #include <vector>
 #include <array>
 #include "Templates/TemplatePracIntermediate.h"
+#include "Templates/TemplatePracHard.h"
 void easy()
 {
 	std::string x = "10";
@@ -162,10 +163,18 @@ void med()
 	std::cout << "Accumulation: " << m4a.accumulate() << "\n";
 	std::cout << "Dot Product: " << m4a.dot(m4b) << "\n";
 }
+void hard()
+{
+	printMultipleArguments(12, 123, 3241, 532, 32, 31);
+	std::cout << accumulation(100,2.023,20,5.1) << '\n';
+	std::cout << multiplier(100, 2.023,20,5.1) << '\n';
+
+	std::cout << factorial(5) << '\n';
+}
 int main()
 {
 	//easy();
-	med();
-
+	//med();
+	hard();
 	return 0;
 }

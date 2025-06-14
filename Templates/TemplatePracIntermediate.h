@@ -193,7 +193,7 @@ public:
 		}
 		std::cout << "NULL\n";
 	}
-	const size_t size() const
+	size_t size() const
 	{
 		return m_size;
 	}
@@ -410,7 +410,7 @@ public:
 		std::cout << '\n';
 	}
 public:
-	const size_t getSize() const
+	size_t getSize() const
 	{
 		return m_size;
 	}

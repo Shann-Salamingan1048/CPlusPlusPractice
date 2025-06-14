@@ -107,19 +107,19 @@ public:
             data.pop_back();
         }
     }
-    T& top()
+    const T& top() const
     {
         return data.back();
     }
-    const bool empty() const
+    bool empty() const
     {
         return data.empty();
     }
-    const size_t size() const
+    size_t size() const
     {
         return data.size();
     }
-    T& peek()
+    const T& peek() const
     {
         return data.front();
     }
@@ -335,27 +335,6 @@ Sure! Here's a list of **30 C++ template tasks** ranging from **easy to hard**, 
 10. **Class Template for a Simple Vector Wrapper**
 
 ---
-
-
-
----
-
-### 🔴 **Hard (21–30): Advanced Templates and Metaprogramming**
-
-21. **Variadic Function Template to Print Multiple Arguments**
-22. **Template Metaprogram to Compute Factorial at Compile Time**
-23. **Type Traits: Implement `is_same<T, U>`**
-24. **Enable/Disable Function Using `std::enable_if`**
-25. **Create a Simple Tuple Class Using Variadic Templates**
-26. **SFINAE Example: Enable Function Only for Integral Types**
-27. **Tag Dispatching for Optimized Overloads**
-28. **Recursive Variadic Template for Summing Numbers**
-29. **Static Assert to Enforce Template Constraints**
-30. **Custom Allocator Class Template**
-
----
-
-Would you like the **code examples** or **detailed instructions** for any of these tasks?
 
 
 
